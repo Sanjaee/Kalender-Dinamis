@@ -1,35 +1,7 @@
 /* Steve jobs' book */
 
 function updateDepth(book, newPage) {
-
-	var page = book.turn('page'),
-		pages = book.turn('pages'),
-		depthWidth = 16*Math.min(1, page*2/pages);
-
-		newPage = newPage || page;
-
-	// Front cover depth (page 1-4)
-	if (newPage > 4) {
-		$('.sj-book .p1 .depth').css({
-			width: depthWidth,
-			left: 20 - depthWidth
-		});
-	} else {
-		$('.sj-book .p1 .depth').css({width: 0});
-	}
-
-	// Back cover depth (page 4)
-	depthWidth = 16*Math.min(1, (pages-page)*2/pages);
-
-	if (newPage <= 16) {
-		$('.sj-book .p4 .depth').css({
-			width: depthWidth,
-			right: 20 - depthWidth
-		});
-	} else {
-		$('.sj-book .p4 .depth').css({width: 0});
-	}
-
+	// Depth effect removed - no cover pages
 }
 
 function loadPage(page) {
@@ -40,7 +12,7 @@ function loadPage(page) {
 			$('.sj-book .p' + page).html(processedHtml);
 			
 			// Execute calendar scripts after page is loaded
-			if (page >= 5 && page <= 16) {
+			if (page >= 1 && page <= 12) {
 				setTimeout(function() {
 					initCalendarPage(page);
 				}, 100);
@@ -68,7 +40,7 @@ function initCalendarPage(page) {
 function renderCalendar(page) {
 	var now = new Date();
 	var year = now.getFullYear();
-	var month = page - 5; // 5=Jan(0), 6=Feb(1), 7=Mar(2), etc.
+	var month = page - 1; // 1=Jan(0), 2=Feb(1), 3=Mar(2), etc.
 	
 	var monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 
 	                  'july', 'august', 'september', 'october', 'november', 'december'];

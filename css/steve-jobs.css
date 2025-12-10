@@ -253,6 +253,8 @@ body, ul, table, form{
 	background-position:-1440px 0 !important;
 }
 
+/* Center page 1 (January) when viewing - handled by JavaScript */
+
 .sj-book .hard{
 	width:480px;
 	height:720px;
