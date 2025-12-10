@@ -23,49 +23,87 @@
 var monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 var monthFullNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-// Custom Events - bisa diubah sesuai kebutuhan per bulan
+// Custom Events - Event penting tahun 2026
 // Format: bulan (0-11): { tanggal: "Nama Event" }
+// Catatan: Tanggal untuk hari libur keagamaan (Imlek, Nyepi, Idulfitri, dll) adalah prediksi
 var calendarEvents = {
 	0: { // January
-		1: "New Year's Day"
-		// Tambahkan event lain di sini, contoh:
-		// 15: "Hari Raya",
-		// 25: "Event Lain"
+		1: "Tahun Baru Masehi",
+		5: "Hari Ulang Tahun PDI Perjuangan",
+		10: "Hari Lingkungan Hidup Indonesia",
+		21: "Hari Jadi Kota Jakarta"
 	},
 	1: { // February
-		17: "TAHUN BARU IHLEK 2577 KONGALI"
-		// Tambahkan event lain di sini, contoh:
-		// 14: "Valentine's Day"
+		17: "Tahun Baru Imlek 2577",
+		5: "Hari Ulang Tahun Himpunan Mahasiswa Islam (HMI)",
+		14: "Hari Kasih Sayang (Valentine's Day)",
+		20: "Hari Kemerdekaan Pers Nasional"
 	},
 	2: { // March
-		// Tambahkan event di sini
+		3: "Hari Raya Nyepi Tahun Baru Saka 1948",
+		11: "Hari Surat Perintah Sebelas Maret (Supersemar)",
+		21: "Hari Puisi Dunia",
+		29: "Hari Musik Nasional"
 	},
 	3: { // April
-		// Tambahkan event di sini
+		3: "Wafat Yesus Kristus (Jumat Agung)",
+		5: "Paskah",
+		1: "Awal Puasa Ramadan 1447 H",
+		21: "Hari Kartini",
+		24: "Peringatan Konferensi Asia-Afrika (KAA)"
 	},
 	4: { // May
-		// Tambahkan event di sini
+		1: "Hari Buruh Internasional / Hari Raya Idulfitri 1447 H",
+		2: "Hari Raya Idulfitri 1447 H (Hari 2)",
+		3: "Hari Raya Waisak 2570 BE",
+		14: "Kenaikan Isa Almasih",
+		20: "Hari Kebangkitan Nasional"
 	},
 	5: { // June
-		// Tambahkan event di sini
+		1: "Hari Lahir Pancasila",
+		17: "Hari Jadi Kota Jakarta",
+		21: "Hari Musik Dunia",
+		22: "Hari Ulang Tahun Kota Jakarta",
+		29: "Hari Keluarga Berencana Nasional (Harganas)"
 	},
 	6: { // July
-		// Tambahkan event di sini
+		5: "Hari Bank Indonesia",
+		17: "Hari Raya Iduladha 1447 H (Hari Raya Qurban) / Hari Koperasi Nasional",
+		23: "Hari Anak Nasional",
+		29: "Hari Bhakti Adhyaksa (Kejaksaan)"
 	},
 	7: { // August
-		// Tambahkan event di sini
+		7: "Tahun Baru Islam 1448 H (1 Muharram)",
+		5: "Hari Dharma Wanita Nasional",
+		14: "Hari Pramuka",
+		17: "Hari Kemerdekaan Republik Indonesia",
+		24: "Hari Televisi Nasional"
 	},
 	8: { // September
-		// Tambahkan event di sini
+		1: "Hari Polisi Wanita (Polwan)",
+		8: "Hari Aksara Internasional",
+		4: "Maulid Nabi Muhammad SAW 1448 H",
+		24: "Hari Tani Nasional",
+		30: "Hari Peringatan G30S/PKI"
 	},
 	9: { // October
-		// Tambahkan event di sini
+		1: "Hari Kesaktian Pancasila",
+		5: "Hari Tentara Nasional Indonesia (TNI)",
+		16: "Hari Pangan Sedunia",
+		28: "Hari Sumpah Pemuda",
+		30: "Hari Keuangan Nasional"
 	},
 	10: { // November
-		// Tambahkan event di sini
+		10: "Hari Pahlawan",
+		12: "Hari Kesehatan Nasional",
+		25: "Hari Guru Nasional",
+		29: "Hari KORPRI"
 	},
 	11: { // December
-		// Tambahkan event di sini
+		3: "Hari Penyandang Disabilitas Internasional",
+		25: "Hari Raya Natal",
+		26: "Cuti Bersama Natal",
+		31: "Malam Tahun Baru"
 	}
 };
 
@@ -184,6 +222,36 @@ function createMainCalendar(year, month, containerId, monthTitleId, yearId, tbod
 		}
 		tbody.appendChild(row);
 		if (date > daysInMonth && nextMonthDate > 7) break;
+	}
+	
+	// Populate calendar-notes with events
+	var monthName = monthFullNames[month].toLowerCase();
+	var notesContainer = document.querySelector('#calendar-' + monthName + ' .calendar-notes');
+	if (notesContainer && events) {
+		// Get all event dates and sort them
+		var eventDates = Object.keys(events).map(function(d) { return parseInt(d, 10); }).sort(function(a, b) { return a - b; });
+		
+		if (eventDates.length > 0) {
+			// Clear existing lines
+			notesContainer.innerHTML = '';
+			
+			// Create event list
+			for (var i = 0; i < eventDates.length; i++) {
+				var eventDate = eventDates[i];
+				var eventText = events[eventDate];
+				var eventLine = document.createElement('div');
+				eventLine.className = 'calendar-notes-line';
+				eventLine.textContent = eventDate + ' - ' + eventText;
+				notesContainer.appendChild(eventLine);
+			}
+			
+			// Fill remaining lines if less than 3 events
+			while (notesContainer.children.length < 3) {
+				var emptyLine = document.createElement('div');
+				emptyLine.className = 'calendar-notes-line';
+				notesContainer.appendChild(emptyLine);
+			}
+		}
 	}
 }
 

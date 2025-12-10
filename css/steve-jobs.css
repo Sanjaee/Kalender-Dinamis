@@ -30,8 +30,8 @@ form {
 
 #canvas {
   width: 1200px;
-  height: 720px;
-  margin: 100px auto;
+  height: 830px;
+  margin: 50px auto;
 }
 
 #book-zoom {
@@ -44,7 +44,7 @@ form {
 
 .sj-book {
   width: 1200px;
-  height: 720px;
+  height: 830px;
 }
 
 .sj-book h1 {
@@ -174,7 +174,7 @@ form {
 
 .sj-book .p1 .side {
   width: 5px;
-  height: 720px;
+  height: 830px;
   position: absolute;
   top: 0;
   left: 475px;
@@ -260,7 +260,7 @@ form {
 
 .sj-book .hard {
   width: 480px;
-  height: 720px;
+  height: 830px;
   background-color: white;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -547,16 +547,23 @@ form {
 }
 
 .sj-book .calendar-notes {
-  margin-top: 10px;
-  border-top: 1px solid #ddd;
-  padding-top: 10px;
-  min-height: 60px;
+   margin-top: 10px;
+   border-top: 1px solid #ddd;
+   padding-top: 10px;
+   min-height: 60px;
 }
 
 .sj-book .calendar-notes-line {
-  height: 14px;
-  border-bottom: 1px solid #e0e0e0;
-  margin-bottom: 5px;
+   height: 14px;
+   border-bottom: 1px solid #e0e0e0;
+   margin-bottom: 5px;
+   font-size: 11px;
+   color: #333;
+   padding: 2px 0;
+}
+
+.sj-book .calendar-notes-line:empty {
+   border-bottom: 1px solid #e0e0e0;
 }
 
 .sj-book .calendar-footer {
