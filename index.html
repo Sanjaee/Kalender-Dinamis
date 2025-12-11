@@ -203,7 +203,7 @@ function loadApp() {
 	// Detect mobile device and set display to single page mode
 	function isMobile() {
 		return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-		       (window.innerWidth <= 768);
+		       (window.innerWidth <= 1100);
 	}
 	
 	// Set display mode to single and resize for mobile devices
@@ -220,7 +220,7 @@ function loadApp() {
 			// Use 95% of viewport height or maintain aspect ratio, whichever is larger
 			var aspectRatioHeight = mobileWidth * 1.38;
 			var viewportBasedHeight = (viewportHeight - 20) * 0.95;
-			var mobileHeight = Math.max(650, Math.max(aspectRatioHeight, viewportBasedHeight));
+			var mobileHeight = Math.max(700, Math.max(aspectRatioHeight, viewportBasedHeight));
 			
 			// Use almost full viewport height, leave just small margin
 			mobileHeight = Math.min(mobileHeight, viewportHeight - 10);

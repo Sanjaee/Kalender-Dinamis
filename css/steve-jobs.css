@@ -328,8 +328,12 @@ form {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .sj-book .page-number {
@@ -558,23 +562,23 @@ form {
 }
 
 .sj-book .calendar-notes {
-   margin-top: 10px;
-   border-top: 1px solid #ddd;
-   padding-top: 10px;
-   min-height: 60px;
+  margin-top: 10px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+  min-height: 60px;
 }
 
 .sj-book .calendar-notes-line {
-   height: 14px;
-   border-bottom: 1px solid #e0e0e0;
-   margin-bottom: 5px;
-   font-size: 11px;
-   color: #333;
-   padding: 2px 0;
+  height: auto;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 5px;
+  font-size: 11px;
+  color: #333;
+  padding: 2px 0;
 }
 
 .sj-book .calendar-notes-line:empty {
-   border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .sj-book .calendar-footer {
@@ -587,7 +591,9 @@ form {
   font-size: 10px;
 }
 
-.sj-book .calendar-footer-url {
+.sj-book .calendar-footer-url a {
+  text-decoration: none;
+  font-weight: bold;
   color: #333;
 }
 
@@ -634,7 +640,8 @@ form {
     width: 100% !important;
     max-width: 100% !important;
   }
-  .sj-book .calendar-table td{
-    height: 20px;
+  .sj-book .calendar-table td {
+    height: 30px;
+    padding-left: 5px;
   }
 }
