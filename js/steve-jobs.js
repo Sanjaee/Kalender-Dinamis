@@ -69,7 +69,7 @@ function addPage(page, book) {
 			{'class': 'own-size',
 				css: {width: 600, height: 830}
 			}).
-			html('<div class="loader"></div>');
+			html('<div class="loader" style="background: none; border: 3px solid #f3f3f3; border-top: 3px solid #d32f2f; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; position: absolute; top: 50%; left: 50%; margin-left: -15px; margin-top: -15px;"></div>');
 
 		if (book.turn('addPage', element, page)) {
 			loadPage(page);

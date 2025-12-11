@@ -225,8 +225,9 @@ function createMainCalendar(year, month, containerId, monthTitleId, yearId, tbod
 	}
 	
 	// Populate calendar-notes with events
-	var monthName = monthFullNames[month].toLowerCase();
-	var notesContainer = document.querySelector('#calendar-' + monthName + ' .calendar-notes');
+	// Use containerId parameter instead of reconstructing from monthFullNames
+	var calendarContainer = document.getElementById(containerId);
+	var notesContainer = calendarContainer ? calendarContainer.querySelector('.calendar-notes') : null;
 	if (notesContainer && events) {
 		// Get all event dates and sort them
 		var eventDates = Object.keys(events).map(function(d) { return parseInt(d, 10); }).sort(function(a, b) { return a - b; });

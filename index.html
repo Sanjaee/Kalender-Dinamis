@@ -5,6 +5,7 @@
 <!--[if IE 9 ]>    <html lang="en" class="ie9"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <script type="text/javascript" src="../../extras/jquery.min.1.7.js"></script>
 <script type="text/javascript" src="../../extras/jquery-ui-1.8.20.custom.min.js"></script>
 <script type="text/javascript" src="../../extras/jquery.mousewheel.min.js"></script>
@@ -76,15 +77,19 @@ function loadApp() {
 			var page = parts[1];
 
 			if (page!==undefined) {
-				if ($('.sj-book').turn('is'))
-					$('.sj-book').turn('page', page);
+				var book = $('.sj-book');
+				if (book.turn && typeof book.turn === 'function' && book.turn('is')) {
+					book.turn('page', page);
+				}
 			}
 
 		},
 		nop: function(path) {
 
-			if ($('.sj-book').turn('is'))
-				$('.sj-book').turn('page', 1);
+			var book = $('.sj-book');
+			if (book.turn && typeof book.turn === 'function' && book.turn('is')) {
+				book.turn('page', 1);
+			}
 		}
 	});
 
@@ -112,7 +117,10 @@ function loadApp() {
 
 	// Flipbook
 
-	flipbook.bind(($.isTouch) ? 'touchend' : 'click', zoomHandle);
+	// Only bind zoomHandle if it exists (after steve-jobs.js is loaded)
+	if (typeof zoomHandle === 'function') {
+		flipbook.bind(($.isTouch) ? 'touchend' : 'click', zoomHandle);
+	}
 
 	flipbook.turn({
 		elevation: 50,
@@ -152,7 +160,16 @@ function loadApp() {
 
 				updateDepth(book);
 
-				book.turn('center');
+				// Resize for mobile if needed
+				if (isMobile()) {
+					setTimeout(function() {
+						if (book.turn('is')) {
+							resizeForMobile();
+						}
+					}, 1);
+				} else {
+					book.turn('center');
+				}
 
 			},
 
@@ -183,14 +200,92 @@ function loadApp() {
 
 	flipbook.addClass('animated');
 	
+	// Detect mobile device and set display to single page mode
+	function isMobile() {
+		return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+		       (window.innerWidth <= 768);
+	}
+	
+	// Set display mode to single and resize for mobile devices
+	function resizeForMobile() {
+		if (isMobile() && flipbook.turn('is')) {
+			// Calculate mobile size based on viewport
+			var viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+			var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+			
+			// Calculate width - use most of viewport width
+			var mobileWidth = Math.max(300, Math.min(viewportWidth - 20, viewportWidth * 0.95));
+			
+			// Calculate height - use maximum of viewport height
+			// Use 95% of viewport height or maintain aspect ratio, whichever is larger
+			var aspectRatioHeight = mobileWidth * 1.38;
+			var viewportBasedHeight = (viewportHeight - 20) * 0.95;
+			var mobileHeight = Math.max(650, Math.max(aspectRatioHeight, viewportBasedHeight));
+			
+			// Use almost full viewport height, leave just small margin
+			mobileHeight = Math.min(mobileHeight, viewportHeight - 10);
+			
+			// Set display to single page mode first
+			flipbook.turn('display', 'single');
+			
+			// Resize flipbook with validated sizes
+			flipbook.turn('size', mobileWidth, mobileHeight);
+			
+			// Also resize book-zoom container
+			$('#book-zoom').css({
+				'width': mobileWidth + 'px',
+				'height': mobileHeight + 'px',
+				'max-width': '100%',
+				'min-height': '600px'
+			});
+			
+			// Resize canvas
+			$('#canvas').css({
+				'width': '100%',
+				'max-width': '100vw',
+				'min-height': '700px'
+			});
+			
+			// Call resize to recalculate after a short delay
+			setTimeout(function() {
+				if (flipbook.turn('is')) {
+					flipbook.turn('resize');
+					flipbook.turn('center');
+				}
+			}, 150);
+		}
+	}
+	
 	// Set initial page to 1 (January)
 	flipbook.turn('page', 1);
 	
-	// Center page 1 on initial load
+	// Apply mobile settings after flipbook is ready and page is loaded
+	setTimeout(function() {
+		if (isMobile() && flipbook.turn('is')) {
+			resizeForMobile();
+		}
+	}, 500);
+	
+	// Also apply after first page is turned
 	setTimeout(function() {
 		flipbook.addClass('turn-page-1');
-		flipbook.turn('center');
-	}, 200);
+		if (isMobile() && flipbook.turn('is')) {
+			resizeForMobile();
+		} else {
+			flipbook.turn('center');
+		}
+	}, 800);
+	
+	// Handle window resize for mobile
+	var resizeTimer;
+	$(window).on('resize orientationchange', function() {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(function() {
+			if (isMobile() && flipbook.turn('is')) {
+				resizeForMobile();
+			}
+		}, 250);
+	});
 
 	// Show canvas
 
