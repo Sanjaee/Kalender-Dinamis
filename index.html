@@ -28,9 +28,9 @@ function loadApp() {
 	
 	var flipbook = $('.sj-book');
 
-	// Check if the CSS was already loaded
+	// Check if the CSS was already loaded and flipbook element exists
 	
-	if (flipbook.width()==0 || flipbook.height()==0) {
+	if (!flipbook.length || flipbook.width()==0 || flipbook.height()==0) {
 		setTimeout(loadApp, 10);
 		return;
 	}
@@ -78,8 +78,14 @@ function loadApp() {
 
 			if (page!==undefined) {
 				var book = $('.sj-book');
-				if (book.turn && typeof book.turn === 'function' && book.turn('is')) {
-					book.turn('page', page);
+				if (book.length && book.turn && typeof book.turn === 'function') {
+					try {
+						if (book.turn('is')) {
+							book.turn('page', page);
+						}
+					} catch(e) {
+						// Flipbook not ready yet
+					}
 				}
 			}
 
@@ -87,8 +93,14 @@ function loadApp() {
 		nop: function(path) {
 
 			var book = $('.sj-book');
-			if (book.turn && typeof book.turn === 'function' && book.turn('is')) {
-				book.turn('page', 1);
+			if (book.length && book.turn && typeof book.turn === 'function') {
+				try {
+					if (book.turn('is')) {
+						book.turn('page', 1);
+					}
+				} catch(e) {
+					// Flipbook not ready yet
+				}
 			}
 		}
 	});
@@ -120,6 +132,12 @@ function loadApp() {
 	// Only bind zoomHandle if it exists (after steve-jobs.js is loaded)
 	if (typeof zoomHandle === 'function') {
 		flipbook.bind(($.isTouch) ? 'touchend' : 'click', zoomHandle);
+	}
+
+	// Ensure flipbook element is ready before initializing
+	if (!flipbook.length || flipbook.width() === 0 || flipbook.height() === 0) {
+		setTimeout(loadApp, 10);
+		return;
 	}
 
 	flipbook.turn({
